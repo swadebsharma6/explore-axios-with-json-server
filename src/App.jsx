@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 // import initialPosts from '../src/db/db.js';
-import axios from "axios";
 import "./App.css";
 import api from "./api/api";
 import AddPosts from "./components/AddPosts";
 import EditPost from "./components/EditPost";
 import Posts from "./components/Posts";
+
 
 
 export default function App() {
@@ -25,7 +25,7 @@ export default function App() {
             };
 
             // const response = await api.post("/posts", finalPost);
-            const response = await axios.post('http://localhost:8000/posts', finalPost);
+            const response = await api.post('/posts', finalPost);
 
             setPosts([...posts, response.data]);
         } catch (err) {
@@ -36,6 +36,7 @@ export default function App() {
     const handleDeletePost = async (postId) => {
         if (confirm("Are you sure you want to delete the post?")) {
             try {
+                // await api.delete(`/posts/${postId}`);
                 await api.delete(`/posts/${postId}`);
                 const newPosts = posts.filter((post) => post.id !== postId);
                 setPosts(newPosts);
@@ -49,10 +50,15 @@ export default function App() {
 
     const handleEditPost = async (updatedPost) => {
         try {
+            // const response = await api.patch(
+            //     `/posts/${updatedPost.id}`,
+            //     updatedPost
+            // );
             const response = await api.patch(
                 `/posts/${updatedPost.id}`,
                 updatedPost
             );
+            // console.log(response)
 
             const updatedPosts = posts.map((post) =>
                 post.id === response.data.id ? response.data : post
@@ -68,7 +74,7 @@ export default function App() {
         const fetchPosts = async () => {
             try {
                 // const response = await api.get("/posts");
-                const response = await axios.get("http://localhost:8000/posts");
+                const response = await api.get("/posts");
                
 
                 if (response && response.data) {
@@ -91,7 +97,7 @@ export default function App() {
     return (
         <div>
             <div>
-                <h1>API Request with Axios</h1>
+                <h1>API Request with api</h1>
                 <hr />
 
                 <div>
